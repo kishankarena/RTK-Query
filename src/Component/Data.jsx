@@ -3,12 +3,13 @@ import {
   useCreateProductMutation,
   useGetAllProductsQuery,
   useGetProductQuery,
-} from "../features/productAPiSlice";
+} from "../features/productApiSlice";
+import DataList from "./DataList";
 
 const Data = () => {
   const [title, setTitle] = useState();
-  // const { data, isLoading, isError } = useGetAllProductsQuery();
-  // const { data: singleProduct } = useGetProductQuery("Iphone");
+  const { refetch } = useGetAllProductsQuery();
+  const { data: singleProduct } = useGetProductQuery("Iphone",{skip:true});
   const [createProduct, { isLoading, isError }] = useCreateProductMutation();
 
   const handleSubmit = async (event) => {
@@ -17,11 +18,14 @@ const Data = () => {
       await createProduct({ title });
 
       setTitle("");
+      // refetch();
     } catch (error) {
       console.log("error", error);
     }
   };
+
   if (isLoading) return <h1>Loading.......</h1>;
+
   return (
     <div>
       <h1>Data Component</h1>
@@ -41,6 +45,7 @@ const Data = () => {
           {isError && <div>Error creating post</div>}
         </form>
       </div>
+     <DataList />
     </div>
   );
 };
